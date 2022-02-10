@@ -17,9 +17,7 @@ namespace AspNetShop.Controllers
 
         public ViewResult List()
         {
-            //ViewBag.Category = "Some New"; //not a good practice. Not strongly typed data
-            //var cars = _allCars.AllCars;
-            //return View(cars);
+            ViewBag.Title = "Сторінка з автомобілями";
             var listVM = new CarsListViewModel();
             listVM.AllCars = _allCars.AllCars;
             listVM.CurrentCategory = "Cars";
