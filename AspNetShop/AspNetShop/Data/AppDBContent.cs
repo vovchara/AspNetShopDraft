@@ -15,5 +15,6 @@ namespace AspNetShop.Data
 
         public DbSet<CarModel> Car { get; set; }
         public DbSet<CategoryModel> Category { get; set; }
+        public DbSet<ShopCartItem> ShopCartItem { get; set; }
     }
 }
