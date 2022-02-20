@@ -1,6 +1,9 @@
 ﻿using AspNetShop.Data.Interfaces;
+using AspNetShop.Data.Models;
 using AspNetShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AspNetShop.Controllers
 {
@@ -15,13 +18,38 @@ namespace AspNetShop.Controllers
             _allCategories = allCategories;
         }
 
-        public ViewResult List()
+        [Route("Cars/List")]
+        [Route("Cars/List/{category}")]
+        public ViewResult List(string category)
         {
+            IEnumerable<CarModel> cars = null;
+            var currCategory = "";
+            if (string.IsNullOrEmpty(category))
+            {
+                cars = _allCars.AllCars.OrderBy(i => i.Id);
+            }
+            else
+            {
+                if (string.Equals("electro", category, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    cars = _allCars.AllCars.Where(i => i.Category.CategoryName.Equals("Elector cars")).OrderBy(i => i.Id);
+                    currCategory = "Електро";
+                }
+                else if (string.Equals("fuel", category, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    cars = _allCars.AllCars.Where(i => i.Category.CategoryName.Equals("Classic cars")).OrderBy(i => i.Id);
+                    currCategory = "Коптілки";
+                }
+            }
+            var csrVM = new CarsListViewModel
+            {
+                AllCars = cars,
+                CurrentCategory = currCategory
+            };
+
             ViewBag.Title = "Сторінка з автомобілями";
-            var listVM = new CarsListViewModel();
-            listVM.AllCars = _allCars.AllCars;
-            listVM.CurrentCategory = "Cars";
-            return View(listVM);
+
+            return View(csrVM);
         }
     }
 }
